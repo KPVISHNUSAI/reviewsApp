@@ -8,19 +8,74 @@ class ReviewsCarousel extends Component {
     activeReview: 0,
   }
 
-  render() {
-    const {reviewsList} = this.props
+  toRightButton = () => {
     const {activeReview} = this.state
+    const {reviewsList} = this.props
+    if (activeReview < reviewsList.length - 1) {
+      this.setState(prevState => ({
+        activeReview: prevState.activeReview + 1,
+      }))
+    }
+  }
+
+  toLeftButton = () => {
+    const {activeReview} = this.state
+    if (activeReview > 0) {
+      this.setState(prevState => ({
+        activeReview: prevState.activeReview - 1,
+      }))
+    }
+  }
+
+  renderActiveReview = review => {
+    const {imgUrl, username, companyName, description} = review
     return (
-      <div className="app-container">
-        <div className="main-container">
-          <h1>Reviews</h1>
-        </div>
+      <div className="review-container">
+        <img className="review-img" src={imgUrl} alt={username} />
+        <p className="heading">{username}</p>
+        <p>{companyName}</p>
+        <p>{description}</p>
       </div>
     )
   }
 
-  // const {imgUrl,username,companyName,description} = reviewDetails
+  render() {
+    const {reviewsList} = this.props
+    const {activeReview} = this.state
+    const currentReviewDetails = reviewsList[activeReview]
+    return (
+      <div className="app-container">
+        <h1 className="heading">Reviews</h1>
+        <div className="main-container">
+          <div className="carousel-container">
+            <button
+            data-testid="leftArrow"
+              type="button"
+              className="navigation-btn"
+              onClick={this.toLeftButton}
+            >
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/left-arrow-img.png"
+                alt="left arrow"
+              />
+            </button>
+            {this.renderActiveReview(currentReviewDetails)}
+            <button
+              data-testid="rightArrow"
+              type="button"
+              className="navigation-btn"
+              onClick={this.toRightButton}
+            >
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/right-arrow-img.png"
+                alt="right arrow"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default ReviewsCarousel
